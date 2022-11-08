@@ -1,4 +1,4 @@
-package package01;
+package practice01;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
