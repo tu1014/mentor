@@ -1,7 +1,6 @@
 package practice02;
 
 import java.io.*;
-import java.util.ArrayList;
 
 public class Book {
 
@@ -33,7 +32,10 @@ public class Book {
         DataOutputStream dos = new DataOutputStream(buf);
 
         dos.writeUTF(name);
-        dos.write(publisher.getBytes());
+
+        byte[] publisherBytes = publisher.getBytes();
+        dos.writeInt(publisherBytes.length);
+        dos.write(publisherBytes);
 
         dos.writeInt(pageNum);
         dos.writeBoolean(isBorrowed);

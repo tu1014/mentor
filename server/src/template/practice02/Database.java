@@ -1,4 +1,4 @@
-package practice02;
+package template.practice02;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package practice02;
+package template.practice02;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -24,24 +24,26 @@ public class Main {
         while(true) {
 
             // header 읽기
-            byte type = is.readByte();
-            byte action = is.readByte();
-            byte target = is.readByte();
-            byte status = is.readByte();
-            int size = is.readInt();
-            System.out.println("type : " + type);
+            byte type = 0;
+            byte action = 0;
+            byte target = 0;
+            byte status = 0;
+            int size = 0;
+
+            /*System.out.println("type : " + type);
             System.out.println("action : " + action);
             System.out.println("target : " + target);
             System.out.println("status : " + status);
-            System.out.println("body size : " + size);
+            System.out.println("body size : " + size);*/
 
             byte[] body = null;
             DataInputStream bodyReader = null;
 
             // 읽어야 할 body가 있다면 읽기
             if(size > 0) {
-                body = new byte[size];
-                is.read(body);
+
+                // body 배열 생성 및 읽기
+
                 bodyReader = new DataInputStream(
                         new ByteArrayInputStream(body)
                 );
@@ -52,51 +54,34 @@ public class Main {
             if(action == MyProtocol.ACTION_QUIT) break;
 
             if(action == MyProtocol.ACTION_READ_ONE) {
+
+                // 조회할 id 읽기
                 System.out.println("READ_ONE");
-                int id = bodyReader.readInt();
+                int id = 0;
                 System.out.println("조회할 id : " + id);
 
                 if(target == MyProtocol.TARGET_BOOK) {
                     System.out.println("TARGET : BOOK");
                     Book book = database.getBook(id);
-                    byte[] resBody = book.getBytes();
-                    byte[] resHeader = MyProtocol.getHeader(
-                            MyProtocol.TYPE_RES,
-                            MyProtocol.ACTION_READ_ONE,
-                            MyProtocol.TARGET_BOOK,
-                            MyProtocol.STATUS_SUCCESS,
-                            resBody.length
-                    );
-                    os.write(resHeader);
-                    os.write(resBody);
+
+                    byte[] resBody = null;
+                    byte[] resHeader = null;
+                    // 참고 : MyProtocol.getHeader();
+
+                    // 헤더 및 바디 전송
+
                 }
 
             }
 
             else if(action == MyProtocol.ACTION_READ_ALL) {
                 ArrayList<Book> books = database.getAllBook();
+
+                // body 바이트 배열 생성에 사용
                 ByteArrayOutputStream buf = new ByteArrayOutputStream();
                 DataOutputStream dbuf = new DataOutputStream(buf);
 
-                // 리스트에 있는 원소 수
-                dbuf.writeInt(books.size());
-
-                for(Book book : books) {
-                    byte[] bookByteArray = book.getBytes();
-                    dbuf.writeInt(bookByteArray.length);
-                    dbuf.write(bookByteArray);
-                }
-
-                byte[] resBody = buf.toByteArray();
-                byte[] resHeader = MyProtocol.getHeader(
-                        MyProtocol.TYPE_RES,
-                        MyProtocol.ACTION_READ_ALL,
-                        MyProtocol.TARGET_BOOK,
-                        MyProtocol.STATUS_SUCCESS,
-                        resBody.length
-                );
-                os.write(resHeader);
-                os.write(resBody);
+                // books 직렬화하여 바디에 담고 헤더 생성하여 전송
 
             }
 
