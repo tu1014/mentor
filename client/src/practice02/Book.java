@@ -5,11 +5,11 @@ import java.io.*;
 public class Book {
 
     private String name;
-    private String publisher;
+    private Publisher publisher;
     private int pageNum;
     private boolean isBorrowed;
 
-    public Book(String name, String publisher, int pageNum, boolean isBorrowed) {
+    public Book(String name, Publisher publisher, int pageNum, boolean isBorrowed) {
         this.name = name;
         this.publisher = publisher;
         this.pageNum = pageNum;
@@ -32,7 +32,11 @@ public class Book {
         DataOutputStream dos = new DataOutputStream(buf);
 
         dos.writeUTF(name);
-        dos.writeUTF(publisher);
+
+        byte[] publisherBytes = publisher.getBytes();
+        dos.writeInt(publisherBytes.length);
+        dos.write(publisherBytes);
+
         dos.writeInt(pageNum);
         dos.writeBoolean(isBorrowed);
 
@@ -45,7 +49,12 @@ public class Book {
         DataInputStream dis = new DataInputStream(new ByteArrayInputStream(bytes));
 
         String name = dis.readUTF();
-        String publisher = dis.readUTF();
+
+        // publisher
+        String publisherName = dis.readUTF();
+        String publisherAddress = dis.readUTF();
+        Publisher publisher = new Publisher(publisherName, publisherAddress);
+
         int pageNum = dis.readInt();
         boolean isBorrowed = dis.readBoolean();
 

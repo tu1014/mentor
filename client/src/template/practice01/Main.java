@@ -1,4 +1,4 @@
-package practice01;
+package template.practice01;
 
 import java.io.IOException;
 import java.io.InputStream;

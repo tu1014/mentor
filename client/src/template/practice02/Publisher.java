@@ -1,6 +1,6 @@
-package practice02;
+package template.practice02;
 
-import java.io.*;
+import java.io.IOException;
 
 public class Publisher {
 
@@ -39,28 +39,13 @@ public class Publisher {
 
     public byte[] getBytes() throws IOException {
 
-        ByteArrayOutputStream buf = new ByteArrayOutputStream();
-        DataOutputStream dos = new DataOutputStream(buf);
-
-        dos.writeUTF(name);
-        dos.writeUTF(address);
-
-        return buf.toByteArray();
+        return null;
 
     }
 
     public static Publisher bytesToPublisher(byte[] bytes) throws IOException {
 
-        DataInputStream dis = new DataInputStream(
-                new ByteArrayInputStream(bytes)
-        );
-
-        String name = dis.readUTF();
-        String address = dis.readUTF();
-
-        return new Publisher(name, address);
-
-
+        return null;
 
     }
 

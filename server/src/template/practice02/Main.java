@@ -43,7 +43,6 @@ public class Main {
             if(size > 0) {
 
                 // body 배열 생성 및 읽기
-
                 bodyReader = new DataInputStream(
                         new ByteArrayInputStream(body)
                 );

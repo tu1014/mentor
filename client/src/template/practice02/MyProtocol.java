@@ -1,4 +1,4 @@
-package practice02;
+package template.practice02;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;

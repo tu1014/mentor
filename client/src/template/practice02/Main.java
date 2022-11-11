@@ -1,14 +1,20 @@
-package practice02;
+package template.practice02;
 
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.Scanner;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Main {
+
+    private final static int COMMAND_READ_BOOK_WITH_ID = 1;
+    private final static int COMMAND_READ_ALL_BOOK = 2;
+    private final static int COMMAND_QUIT = 3;
+
+
     public static void main(String[] args) throws IOException {
 
         Socket socket = new Socket("127.0.0.1", 3000);
@@ -32,122 +38,90 @@ public class Main {
             System.out.print("메뉴를 선택하세요 : ");
             command = s.nextInt();
 
-            if(command == 1) {
+            if(command == COMMAND_READ_BOOK_WITH_ID) {
                 int id;
                 System.out.print("조회할 Book의 id를 입력하세요 : ");
                 id = s.nextInt();
 
                 // REQUEST 보내기
-                byte[] header = MyProtocol.getHeader(
-                        MyProtocol.TYPE_REQ,
-                        MyProtocol.ACTION_READ_ONE,
-                        MyProtocol.TARGET_BOOK,
-                        MyProtocol.UNUSED,
-                        4
-                );
+                byte[] header = null;
+                // 참고 : MyProtocol.getHeader();
 
                 dos.write(header);
                 dos.writeInt(id);
 
                 // RESPONSE 받기
-                byte[] resHeader = new byte[MyProtocol.SIZE_HEADER];
-                dis.read(resHeader);
+                byte[] resHeader = null;
 
-                DataInputStream resInput = new DataInputStream(
-                        new ByteArrayInputStream(resHeader)
-                );
-
-
-                byte type = resInput.readByte();
-                byte action = resInput.readByte();
-                byte target = resInput.readByte();
-                byte status = resInput.readByte();
-                int size = resInput.readInt();
+                // 헤더 읽기
+                byte type = 0;
+                byte action = 0;
+                byte target = 0;
+                byte status = 0;
+                int size = 0;;
 
                 byte[] body = null;
                 DataInputStream resBodyReader = null;
 
                 // 읽어야 할 body가 있다면 읽기
                 if(size > 0) {
-                    body = new byte[size];
-                    dis.read(body);
+
                 }
 
-                Book book = Book.bytesToBook(body);
+
+                // 바디로부터 Book 역직렬화하기
+                Book book = null;
                 System.out.println(book);
 
             }
 
 
-            else if(command == 2){
+            else if(command == COMMAND_READ_ALL_BOOK){
 
                 // REQUEST 보내기
-                byte[] header = MyProtocol.getHeader(
-                        MyProtocol.TYPE_REQ,
-                        MyProtocol.ACTION_READ_ALL,
-                        MyProtocol.TARGET_BOOK,
-                        MyProtocol.UNUSED,
-                        0
-                );
+                byte[] header = null;
 
-                dos.write(header);
 
                 // RESPONSE 받기
-                byte[] resHeader = new byte[MyProtocol.SIZE_HEADER];
-                dis.read(resHeader);
+                byte[] resHeader = null;
 
                 DataInputStream resInput = new DataInputStream(
                         new ByteArrayInputStream(resHeader)
                 );
 
 
-                byte type = resInput.readByte();
-                byte action = resInput.readByte();
-                byte target = resInput.readByte();
-                byte status = resInput.readByte();
-                int size = resInput.readInt();
+                byte type = 0;
+                byte action = 0;
+                byte target = 0;
+                byte status = 0;
+                int size = 0;
 
                 byte[] body = null;
                 DataInputStream resBodyReader = null;
 
                 // 읽어야 할 body가 있다면 읽기
                 if(size > 0) {
-                    body = new byte[size];
-                    dis.read(body);
-                    resBodyReader = new DataInputStream(
-                            new ByteArrayInputStream(body)
-                    );
-                }
-
-                int count = resBodyReader.readInt();
-
-                for(int i=0; i<count; i++) {
-
-                    int bookSize = resBodyReader.readInt();
-                    byte[] byteArray = new byte[bookSize];
-                    resBodyReader.read(byteArray);
-
-                    Book book = Book.bytesToBook(byteArray);
-                    System.out.println(book);
 
                 }
+
+                // Body에서 Book 여러번 읽어 츨력하기
+
+            }
+
+            else if(command == COMMAND_QUIT) {
+
+                // REQUEST 보내기
+                byte[] header = null;
+
+
+
+                break;
 
             }
 
             else {
-
-                // REQUEST 보내기
-                byte[] header = MyProtocol.getHeader(
-                        MyProtocol.TYPE_REQ,
-                        MyProtocol.ACTION_QUIT,
-                        MyProtocol.UNUSED,
-                        MyProtocol.UNUSED,
-                        0
-                );
-
-                dos.write(header);
-                break;
-
+                // 예외 처리
+                // 실습시 작성할 필요 없음
             }
 
             System.out.println("======================================");

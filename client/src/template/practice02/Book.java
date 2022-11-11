@@ -1,6 +1,6 @@
-package practice02;
+package template.practice02;
 
-import java.io.*;
+import java.io.IOException;
 
 public class Book {
 
@@ -28,37 +28,14 @@ public class Book {
 
     public byte[] getBytes() throws IOException {
 
-        ByteArrayOutputStream buf = new ByteArrayOutputStream();
-        DataOutputStream dos = new DataOutputStream(buf);
 
-        dos.writeUTF(name);
-
-        byte[] publisherBytes = publisher.getBytes();
-        dos.writeInt(publisherBytes.length);
-        dos.write(publisherBytes);
-
-        dos.writeInt(pageNum);
-        dos.writeBoolean(isBorrowed);
-
-        return buf.toByteArray();
+        return null;
 
     }
 
     public static Book bytesToBook(byte[] bytes) throws IOException {
 
-        DataInputStream dis = new DataInputStream(new ByteArrayInputStream(bytes));
-
-        String name = dis.readUTF();
-
-        // publisher
-        String publisherName = dis.readUTF();
-        String publisherAddress = dis.readUTF();
-        Publisher publisher = new Publisher(publisherName, publisherAddress);
-
-        int pageNum = dis.readInt();
-        boolean isBorrowed = dis.readBoolean();
-
-        return new Book(name, publisher, pageNum, isBorrowed);
+        return null;
 
     }
 

@@ -1,10 +1,8 @@
-package practice02;
+package template.practice02;
 
-import java.io.*;
+import java.io.IOException;
 
 public class Student {
-
-    private static final String className = "Student";
 
     private String name;
     private String address;
@@ -27,28 +25,13 @@ public class Student {
 
     public byte[] getBytes() throws IOException {
 
-        ByteArrayOutputStream buf = new ByteArrayOutputStream();
-        DataOutputStream dos = new DataOutputStream(buf);
-
-        dos.writeUTF(name);
-        dos.writeUTF(address);
-        dos.writeInt(age);
-
-        return buf.toByteArray();
+        return null;
 
     }
 
     public static Student bytesToStudent(byte[] bytes) throws IOException {
 
-        DataInputStream dis = new DataInputStream(
-                new ByteArrayInputStream(bytes)
-        );
-
-        String name = dis.readUTF();
-        String address = dis.readUTF();
-        int age = dis.readInt();
-
-        return new Student(name, address, age);
+        return null;
 
     }
 
